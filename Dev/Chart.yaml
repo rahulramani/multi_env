@@ -1,5 +1,5 @@
 apiVersion: v2
-name: my-website-chart
+name: my-website-chart-Dev
 description: A Helm chart for my website
 
 # A chart can be either an 'application' or a 'library' chart.
