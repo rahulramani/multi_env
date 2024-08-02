@@ -1,0 +1,60 @@
+---
+# Source: my-website-chart/templates/app-svc.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: my-website-chart
+  name: my-website-chart-svc
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: my-website-chart
+  type: LoadBalancer
+---
+# Source: my-website-chart/templates/app-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: release-name-my-website-chart
+  labels:
+    app: my-website-chart
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-website-chart
+  template:
+    metadata:
+      labels:
+        app: my-website-chart
+    spec:
+      containers:
+      - name: my-website-chart
+        image: karimessouabni/lucky-app
+        ports:
+        - containerPort: 80
+---
+# Source: my-website-chart/templates/tests/test-connection.yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "release-name-my-website-chart-test-connection"
+  labels:
+    helm.sh/chart: my-website-chart-0.1.0
+    app.kubernetes.io/name: my-website-chart
+    app.kubernetes.io/instance: release-name
+    app.kubernetes.io/version: "1.16.0"
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['release-name-my-website-chart:80']
+  restartPolicy: Never
