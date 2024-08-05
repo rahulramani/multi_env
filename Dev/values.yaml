@@ -9,6 +9,9 @@ service:
   type: NodePort
 
 
+trivy-operator:
+  trivy:
+    ignoreUnfixed: true
 
 # # Default values for my-website-chart.
 # # This is a YAML-formatted file.
